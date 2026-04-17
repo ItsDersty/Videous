@@ -1,14 +1,14 @@
 from django.db import models
 from django.conf import settings
-from taggit.managers import TaggableManager
+import uuid
 
 class Post(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     name = models.CharField("title", max_length=64)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name="posts")
     
-    tags = TaggableManager()
     file = models.FileField("video file", upload_to="videos/%Y/%m/%d/")
     thumbnail = models.ImageField("thumbnail", upload_to="thumbs/%Y/%m/%d/", blank=True, null=True)
 
@@ -19,6 +19,7 @@ class Post(models.Model):
         return self.name
     
 class Playlist(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     name = models.CharField("title", max_length=64)
     desc = models.TextField("description",max_length=256)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
